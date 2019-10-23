@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements com.example.mymem
         initChangeButton();
         initTextChangedEvents();
         initToggleButton();
+        initSaveButton();
         setForEditing(false);
         currentMemo = new Memo();
     }
@@ -145,6 +146,39 @@ public class MainActivity extends AppCompatActivity implements com.example.mymem
         if(enabled){
             etMemoInfo.requestFocus();
         }
+    }
+    private void initSaveButton(){
+        Button saveButton = (Button)findViewById(R.id.buttonSave);
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean wasSuccessful = false;
+                MemoDataSource ds = new MemoDataSource(MainActivity.this);
+                try{
+                    ds.open();
+                    if(currentMemo.getMemoId()== -1){
+                        wasSuccessful = ds.insertMemo(currentMemo);
+
+                    }
+                    else {
+                        wasSuccessful = ds.updateMemo(currentMemo);
+                    }
+                }
+                catch(Exception e){
+
+
+                    wasSuccessful = false;
+
+                }
+                if(wasSuccessful){
+                    ToggleButton editToggle = (ToggleButton)findViewById(R.id.toggleButtonEdit);
+                    editToggle.toggle();
+                    setForEditing(false);
+                }
+
+
+            }
+        });
     }
 
 

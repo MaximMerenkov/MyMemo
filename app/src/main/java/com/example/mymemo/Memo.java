@@ -4,8 +4,6 @@ import java.util.Calendar;
 
 public class Memo {
     private int memoId;
-
-
     private String memoTitle;
     private String memoInfo;
     private String priority;

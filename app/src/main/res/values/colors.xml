@@ -10,4 +10,9 @@
     <color name="dialog_button_color">#26C6DA</color>
     <color name="slate_gray">#708090</color>
     <color name="toolbar_background">#bebebe</color>
+    <color name="medium_slate_blue">#7B68EE</color>
+    <color name="pale_goldenrod">#EEE8AA</color>
+    <color name="system_red">#ff0000</color>
+    <color name="system_transparent">#00000000</color>
+    <color name="system_blue">#0000ff</color>
 </resources>
