@@ -105,6 +105,7 @@
                     android:layout_weight="1"
                     android:text="Low" />
             </RadioGroup>
+
             <TextView
                 android:id="@+id/textSortByDate"
                 android:layout_width="wrap_content"

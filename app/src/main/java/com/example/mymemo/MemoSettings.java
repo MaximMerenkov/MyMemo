@@ -5,11 +5,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 public class MemoSettings extends AppCompatActivity {
 
@@ -53,9 +56,9 @@ public class MemoSettings extends AppCompatActivity {
     }
     private void initSettings(){
         String sortBy =getSharedPreferences("MyMemoPreferences",
-                Context.MODE_PRIVATE).getString("sortfield", "high");
+                Context.MODE_PRIVATE).getString("sortfield", "priority");
         String sortOrder = getSharedPreferences("MyMemoPreferences",
-                Context.MODE_PRIVATE).getString("sortorder","selected" );
+                Context.MODE_PRIVATE).getString("sortorder","memoDate" );
         RadioButton rbHigh = (RadioButton)findViewById(R.id.radioHigh);
         RadioButton rbMedium = (RadioButton)findViewById(R.id.radioMedium);
         RadioButton rbLow = (RadioButton)findViewById(R.id.radioLow);
@@ -71,7 +74,7 @@ public class MemoSettings extends AppCompatActivity {
         CheckBox cbDate = (CheckBox)findViewById(R.id.checkBoxDate);
 
 
-        if(sortOrder.equalsIgnoreCase("selected")){
+        if(sortOrder.equalsIgnoreCase("memoDate")){
             cbDate.setChecked(true);
         }
         else{
@@ -108,23 +111,35 @@ public class MemoSettings extends AppCompatActivity {
 
     }
     private void initSortOrderClick(){
-        RadioGroup rgSortOrder = (RadioGroup)findViewById(R.id.radioGroupSortDate);
-        rgSortOrder.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        CheckBox cbDate = (CheckBox)findViewById(R.id.checkBoxDate);
+        cbDate.setOnCheckedChangeListener(new CheckBox.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(RadioGroup arg0, int arg1) {
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
                 CheckBox cbDate = (CheckBox)findViewById(R.id.checkBoxDate);
+                Log.wtf("Test2", "DATE");
                 if(cbDate.isChecked()){
                     getSharedPreferences("MyMemoPreferences",
-                            Context.MODE_PRIVATE).edit().putString("sortorder", "selected").commit();
+                            Context.MODE_PRIVATE).edit().putString("sortorder", "memoDate").commit();
+
+                    //debug
+                    Toast.makeText(MemoSettings.this, "Date sort is checked", Toast.LENGTH_LONG).show();
+                    Log.wtf("wtf","true");
                 }
                 else{
                     getSharedPreferences("MyMemoPreferences",
-                            Context.MODE_PRIVATE).edit().putString("sortorder", "date").commit();
+                            Context.MODE_PRIVATE).edit().putString("sortorder", "nodate").commit();
+
+                    //debug
+                    Toast.makeText(MemoSettings.this, "Date sort, is unchecked", Toast.LENGTH_LONG).show();
+                    Log.wtf("wtf","false");
+
                 }
 
             }
         });
 
     }
-    //comm
+
+
 }

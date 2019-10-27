@@ -12,7 +12,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import java.util.Calendar;
@@ -33,8 +36,16 @@ public class MainActivity extends AppCompatActivity implements com.example.mymem
         initTextChangedEvents();
         initToggleButton();
         initSaveButton();
+        Bundle extras = getIntent().getExtras();
+        if(extras!=null){
+            initMemo(extras.getInt("memoid"));
+        }
+        else{
+            currentMemo = new Memo();
+        }
         setForEditing(false);
-        currentMemo = new Memo();
+
+
     }
 
     private void initListButton() {
@@ -118,10 +129,40 @@ public class MainActivity extends AppCompatActivity implements com.example.mymem
             public void afterTextChanged(Editable s) {
                 currentMemo.setMemoInfo(etMemoInfo.getText().toString());
 
+
             }
         });
 
+
+
+
+      final RadioGroup rgPriority = (RadioGroup)findViewById(R.id.radioGroup);
+        rgPriority.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup arg0, int arg1) {
+                RadioButton rbHigh =(RadioButton)findViewById(R.id.high);
+                RadioButton rbMedium =(RadioButton)findViewById(R.id.medium);
+                RadioButton rbLow =(RadioButton)findViewById(R.id.low);
+                if(rbHigh.isChecked()){
+                    currentMemo.setPriority(rbHigh.getText().toString());
+                    Toast.makeText(MainActivity.this, "High checked", Toast.LENGTH_SHORT).show();
+                }
+                else if(rbMedium.isChecked()){
+                    currentMemo.setPriority(rbMedium.getText().toString());
+                }
+                else{
+                    currentMemo.setPriority(rbLow.getText().toString());
+                }
+
+
+            }
+        });
+
+
+
+
     }
+
     private void initToggleButton(){
         final ToggleButton editToggle = (ToggleButton) findViewById(R.id.toggleButtonEdit);
         editToggle.setOnClickListener(new View.OnClickListener() {
@@ -158,6 +199,10 @@ public class MainActivity extends AppCompatActivity implements com.example.mymem
                     ds.open();
                     if(currentMemo.getMemoId()== -1){
                         wasSuccessful = ds.insertMemo(currentMemo);
+                        if(wasSuccessful){
+                            int newId = ds.getLastMemoId();
+                            currentMemo.setMemoId(newId);
+                        }
 
                     }
                     else {
@@ -179,6 +224,37 @@ public class MainActivity extends AppCompatActivity implements com.example.mymem
 
             }
         });
+    }
+    private void initMemo(int id){
+        MemoDataSource ds = new MemoDataSource(MainActivity.this);
+        try{
+            ds.open();
+            currentMemo = ds.getSpecificMemo(id);
+            ds.close();
+        }
+        catch (Exception e){
+            Toast.makeText(this, "Failed loading memo",Toast.LENGTH_LONG).show();
+        }
+        EditText etTitle = (EditText)findViewById(R.id.editMemoTitle);
+        EditText etMemoInfo = (EditText)findViewById(R.id.memoMessage);
+        TextView memoDate = (TextView)findViewById(R.id.textMemoDate);
+        RadioButton rbHigh =(RadioButton)findViewById(R.id.high);
+        RadioButton rbMedium =(RadioButton)findViewById(R.id.medium);
+        RadioButton rbLow =(RadioButton)findViewById(R.id.low);
+        if(currentMemo.getPriority().equalsIgnoreCase("high")){
+            rbHigh.setChecked(true);
+        }
+        else if(currentMemo.getPriority().equalsIgnoreCase("medium")){
+            rbMedium.setChecked(true);
+        }
+        else{
+            rbLow.setChecked(true);
+        }
+
+        etTitle.setText(currentMemo.getMemoTitle());
+        etMemoInfo.setText(currentMemo.getMemoInfo());
+        memoDate.setText(DateFormat.format("MM/dd/yyyy",
+                currentMemo.getMemoDate().getTimeInMillis()).toString());
     }
 
 
