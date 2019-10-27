@@ -192,6 +192,18 @@
 
             </Button>
 
+
+            <ImageView
+                android:id="@+id/imageEnable"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/toggleButtonEdit"
+                android:layout_marginStart="200dp"
+                android:layout_marginTop="-105dp"
+                app:srcCompat="@drawable/locked_pen_icon">
+
+            </ImageView>
+
             <ToggleButton
                 android:id="@+id/toggleButtonEdit"
                 android:layout_width="wrap_content"
