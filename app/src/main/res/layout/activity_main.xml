@@ -179,6 +179,17 @@
                 android:text="Change Date"/>
 
 
+            <ImageView
+                android:id="@+id/imageSave"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/buttonSave"
+                android:layout_marginStart="310dp"
+                android:layout_marginTop="-105dp"
+                app:srcCompat="@drawable/save_icon">
+
+            </ImageView>
+
             <Button
                 android:id="@+id/buttonSave"
                 android:layout_width="wrap_content"
